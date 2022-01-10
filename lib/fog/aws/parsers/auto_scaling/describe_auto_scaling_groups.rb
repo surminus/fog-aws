@@ -22,7 +22,8 @@ module Fog
               'SuspendedProcesses' => [],
               'Tags' => [],
               'TargetGroupARNs' => [],
-              'TerminationPolicies' => []
+              'TerminationPolicies' => [],
+              'MixedInstancesPolicy' => [],
             }
           end
 
@@ -62,6 +63,8 @@ module Fog
               @in_target_groups = true
             when 'TerminationPolicies'
               @in_termination_policies = true
+            when 'MixedInstancesPolicy'
+              @in_mixed_instances_policy = true
             end
           end
 
@@ -88,6 +91,8 @@ module Fog
                 @auto_scaling_group['TargetGroupARNs'] << value
               elsif @in_termination_policies
                 @auto_scaling_group['TerminationPolicies'] << value
+              elsif @in_mixed_instances_policy
+                @auto_scaling_group['MixedInstancesPolicy'] << value
               else
                 @results['AutoScalingGroups'] << @auto_scaling_group
                 reset_auto_scaling_group
@@ -133,6 +138,9 @@ module Fog
               else
                 @auto_scaling_group[name] = value
               end
+
+            when 'MixedInstancesPolicy'
+              @in_mixed_instances_policy = false
 
             when 'AutoScalingGroupARN', 'AutoScalingGroupName'
               @auto_scaling_group[name] = value
